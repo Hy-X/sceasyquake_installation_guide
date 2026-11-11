@@ -83,7 +83,7 @@ You don't need local hardware or physical sensors. SeisComP can pull real-time d
 
 Make sure you are in your actual SeisComP directory:
 ```bash
-export SEISCOMP_ROOT=/home/hongyuxiao/Projects/SeiscomP/seiscomp
+export SEISCOMP_ROOT=/home/sysop/Projects/SeiscomP/seiscomp
 cd $SEISCOMP_ROOT
 ```
 
@@ -91,13 +91,13 @@ Download station metadata directly into SeisComP inventory using `curl` and Seis
 
 ```bash
 # 1. Download official StationXML from IRIS FDSN for the 5 OK stations (HH and BH channels)
-mkdir -p /home/hongyuxiao/Projects/SeiscomP/stationxml
+mkdir -p /home/sysop/Projects/SeiscomP/stationxml
 curl -sL "https://service.iris.edu/fdsnws/station/1/query?net=OK&sta=ALVA,AMES,ARC2,BAUM,BCOK&cha=HH?,BH?&level=response&format=xml" \
-  -o /home/hongyuxiao/Projects/SeiscomP/stationxml/OK_stations.xml
+  -o /home/sysop/Projects/SeiscomP/stationxml/OK_stations.xml
 
 # 2. Import into SeisComP's inventory directory
 mkdir -p etc/inventory
-bin/seiscomp exec fdsnxml2inv /home/hongyuxiao/Projects/SeiscomP/stationxml/OK_stations.xml etc/inventory/inventory_OK.xml
+bin/seiscomp exec fdsnxml2inv /home/sysop/Projects/SeiscomP/stationxml/OK_stations.xml etc/inventory/inventory_OK.xml
 
 # 3. Synchronize inventory with the database
 bin/seiscomp exec scinv sync
@@ -196,7 +196,7 @@ Run this complete block to create the profiles, bind all 5 Oklahoma stations, an
 
 ```bash
 # 1. Ensure you are in your SeisComP directory
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # 2. Define the SeedLink chain profile for EarthScope (pulling HH and BH channels)
 mkdir -p etc/key/seedlink
@@ -243,8 +243,8 @@ By default, SeisComP's associator (`scautoloc`) operates without depth caps or a
 Apply crustal constraints by creating a user override configuration in `etc/scautoloc.cfg`:
 
 ```bash
-# Make sure you are in /home/hongyuxiao/Projects/SeiscomP/seiscomp
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+# Make sure you are in /home/sysop/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # Create user override file
 cat << 'EOF' >> etc/scautoloc.cfg
@@ -290,7 +290,7 @@ scautopick:default
 Enable the core native modules and start the system:
 
 ```bash
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # Enable acquisition, database, picker, locator, amplitude, magnitude, event, and waveform archive
 ./bin/seiscomp enable seedlink scdb scautopick scautoloc scamp scmag scevent slarchive
@@ -613,7 +613,7 @@ If you want to expand your current Oklahoma network from 5 stations to 15 statio
 
 ```bash
 # 0. Navigate to SeisComP root directory
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # 1. Download full OK network metadata from IRIS (supporting both 100 Hz HH and 20-40 Hz BH channels)
 mkdir -p ../stationxml
@@ -649,7 +649,7 @@ Suppose you want to monitor the neighboring state of Texas (`TX`) alongside Okla
 
 ```bash
 # 0. Navigate to SeisComP root directory
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # 1. Download official StationXML for network TX (HH and BH channels)
 mkdir -p ../stationxml
@@ -686,7 +686,7 @@ You are not limited to EarthScope. You can pull stations from different internat
 
 ```bash
 # 0. Navigate to SeisComP root directory
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # 1. Create a second SeedLink profile pointing to GEOFON (Potsdam, Germany)
 cat << 'EOF' > etc/key/seedlink/profile_geofon
@@ -726,7 +726,7 @@ If you want to monitor a regional tectonic zone regardless of network operator, 
 
 ```bash
 # 0. Navigate to SeisComP root directory
-cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+cd /home/sysop/Projects/SeiscomP/seiscomp
 
 # 1. Query all broadband stations inside the Oklahoma/Texas border region:
 mkdir -p ../stationxml
@@ -809,10 +809,10 @@ And restart: `seiscomp restart sceasyquake`.
   - `mysql -u sysop -psysop seiscomp -e "SELECT * FROM Pick ORDER BY time_value DESC LIMIT 10;"` (database records)
 
 ### Gotcha 3: `seiscomp status` Returns Blank or Exit Code 245
-- **Cause:** `$SEISCOMP_ROOT` is pointing to the outer folder (`/home/hongyuxiao/Projects/SeiscomP`) instead of the true installation root (`/home/hongyuxiao/Projects/SeiscomP/seiscomp`), which lacks `etc/descriptions`.
+- **Cause:** `$SEISCOMP_ROOT` is pointing to the outer folder (`/home/sysop/Projects/SeiscomP`) instead of the true installation root (`/home/sysop/Projects/SeiscomP/seiscomp`), which lacks `etc/descriptions`.
 - **Fix:** Ensure `~/.bashrc` has:
   ```bash
-  export SEISCOMP_ROOT=/home/hongyuxiao/Projects/SeiscomP/seiscomp
+  export SEISCOMP_ROOT=/home/sysop/Projects/SeiscomP/seiscomp
   ```
   And reload with `source ~/.bashrc`.
 
@@ -847,8 +847,8 @@ And restart: `seiscomp restart sceasyquake`.
 - **Cause:** A distant, strong teleseismic earthquake ($M \ge 5.5$) arrived nearly vertically. Because the steep wavefront struck the entire regional network almost simultaneously (apparent velocity $\sim 28\text{ km/s}$), LOCSAT mathematically fit the near-zero relative travel times by pushing the hypocenter straight down to its 750 km depth ceiling.
 - **Fix:** Restrict `scautoloc` to regional crustal limits and reject one-sided array geometries in `etc/scautoloc.cfg`:
   ```bash
-  # Make sure you are in /home/hongyuxiao/Projects/SeiscomP/seiscomp
-  cd /home/hongyuxiao/Projects/SeiscomP/seiscomp
+  # Make sure you are in /home/sysop/Projects/SeiscomP/seiscomp
+  cd /home/sysop/Projects/SeiscomP/seiscomp
 
   # Create user override file
   cat << 'EOF' >> etc/scautoloc.cfg
