@@ -1,0 +1,313 @@
+"""GPD (Generalized Phase Detection) predictor plugin for sceasyquake.
+
+Uses the GPD architecture (Ross et al. 2018) via:
+- easyQuake.seisbench.GPD  (bundled, preferred)
+- seisbench.models.GPD     (system seisbench, fallback)
+
+The default detection threshold is **0.994**, matching the value used in the
+original easyQuake pipeline (gpd_predict/gpd_predict.py, ``min_proba = 0.994``).
+
+Pretrained weight sets (picker.pretrained):
+    original   – original Ross et al. weights (default)
+    ethz       – ETH Zürich network (if available in seisbench)
+    scedc      – Southern California Seismic Data Center
+    geofon     – GEOFON network
+
+Custom weights (picker.model_path):
+    Point to either:
+    • A directory containing ``<name>.pt`` + ``<name>.json`` (seisbench format,
+      produced by ``GPD.save()``).  Loaded via ``GPD.load(path)``.
+    • A raw PyTorch state-dict file (``*.pt``).  Loaded via
+      ``GPD().load_state_dict(torch.load(path))``.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import List, Dict, Any, Optional
+
+import numpy as np
+from scipy.signal import find_peaks
+
+log = logging.getLogger(__name__)
+
+
+class GPDPredictor:
+    def __init__(
+        self,
+        pretrained: str = 'original',
+        model_path: Optional[str] = None,
+        threshold: float = 0.994,
+        min_distance: float = 0.2,
+        device: str = 'cpu',
+    ):
+        """Create a GPDPredictor.
+
+        Parameters
+        ----------
+        pretrained   : pretrained weight set name (e.g. 'original', 'scedc')
+        model_path   : path to custom weights (directory or .pt file).
+                       Overrides *pretrained* when set.
+        threshold    : probability threshold – default 0.994 matches easyQuake.
+        min_distance : minimum separation between picks in seconds.
+        device       : 'cpu' or 'cuda'.
+        """
+        self.pretrained = pretrained or 'original'
+        self.model_path = model_path or None
+        self.threshold = threshold
+        self.min_distance = min_distance
+        self.device = device
+        self._loaded_model = None
+        self._sbm_module = None
+
+    @property
+    def _author_tag(self) -> str:
+        """Human-readable author string identifying the model and weights."""
+        import os
+        if self.model_path:
+            weights = os.path.basename(self.model_path.rstrip('/\\'))
+        else:
+            weights = self.pretrained
+        return f'sceasyquake/GPD:{weights}'
+
+    # ------------------------------------------------------------------
+    # Model loading
+    # ------------------------------------------------------------------
+
+    def load_model(self) -> bool:
+        """Load and cache the GPD model onto the target device."""
+        sbm = self._import_backend()
+        if sbm is None:
+            raise RuntimeError(
+                'No seisbench-compatible backend found for GPD. '
+                'Install easyQuake or seisbench.'
+            )
+        self._sbm_module = sbm
+        try:
+            import torch
+            model = self._load_weights(sbm)
+            model.eval()
+            if self.device == 'cuda':
+                try:
+                    model = model.cuda()
+                    log.info('GPD loaded on CUDA')
+                except Exception as exc:
+                    log.warning('CUDA unavailable, falling back to CPU: %s', exc)
+                try:
+                    torch.set_num_threads(4)
+                except Exception:
+                    pass
+                try:
+                    torch.set_num_interop_threads(2)
+                except Exception:
+                    pass
+            self._loaded_model = model
+            log.info('GPD ready (weights=%s, device=%s, threshold=%.4f)',
+                     self.model_path or self.pretrained, self.device, self.threshold)
+            return True
+        except Exception as exc:
+            log.exception('Failed to load GPD model: %s', exc)
+            self._loaded_model = None
+            return False
+
+    def _load_weights(self, sbm):
+        """Resolve model_path / pretrained into a GPD instance."""
+        import torch
+        if self.model_path:
+            p = Path(self.model_path)
+            if p.suffix == '.pt' and p.is_file():
+                # Raw state-dict file (easyQuake style)
+                log.info('GPD: loading state dict from %s', p)
+                model = sbm.GPD()
+                state = torch.load(str(p), map_location='cpu')
+                model.load_state_dict(state)
+                return model
+            else:
+                # Seisbench-format directory (has .pt + .json)
+                log.info('GPD: loading seisbench weights from %s', p)
+                return sbm.GPD.load(str(p))
+        log.info('GPD: from_pretrained(%s)', self.pretrained)
+        return sbm.GPD.from_pretrained(self.pretrained)
+
+    @staticmethod
+    def _import_backend():
+        """Try easyQuake.seisbench first, then system seisbench."""
+        for module_path in ('easyQuake.seisbench', 'seisbench.models'):
+            try:
+                if module_path == 'easyQuake.seisbench':
+                    import easyQuake.seisbench as mod  # type: ignore
+                else:
+                    import seisbench.models as mod  # type: ignore
+                if not hasattr(mod, 'GPD'):
+                    continue
+                log.info('GPDPredictor: using %s', module_path)
+                return mod
+            except Exception as exc:
+                log.debug('Could not import %s: %s', module_path, exc)
+        return None
+
+    # ------------------------------------------------------------------
+    # Prediction
+    # ------------------------------------------------------------------
+
+    def predict(self, stream_or_trace) -> List[Dict[str, Any]]:
+        """Run GPD on an ObsPy Trace or Stream."""
+        from obspy import Stream as ObspyStream, Trace as ObspyTrace
+        if isinstance(stream_or_trace, ObspyTrace):
+            st = ObspyStream(traces=[stream_or_trace])
+        elif isinstance(stream_or_trace, ObspyStream):
+            st = stream_or_trace
+        else:
+            st = ObspyStream(traces=[stream_or_trace])
+        return self._annotate_picks(st)
+
+    def predict_multi(self, keys_and_streams: list) -> List[Dict[str, Any]]:
+        """Batch inference: merge all channel streams into one annotate() call."""
+        if not keys_and_streams:
+            return []
+        from obspy import Stream as ObspyStream
+        combined = ObspyStream()
+        for _key, st in keys_and_streams:
+            try:
+                combined += st.copy()
+            except Exception:
+                pass
+        if len(combined) == 0:
+            return []
+        return self._annotate_picks(combined)
+
+    def _annotate_picks(self, st) -> List[Dict[str, Any]]:
+        """Run annotate() and convert probability traces into pick dicts.
+
+        GPD uses a point-output model; annotate() still returns per-sample
+        probability traces labelled ``GPD_P``, ``GPD_S`` (and ``GPD_N`` which
+        we skip).  We apply find_peaks with the 0.994 threshold (or whatever
+        the user set) to extract discrete picks.
+        """
+        if self._loaded_model is None:
+            log.warning('GPD model not loaded; call load_model() first')
+            return []
+        import torch
+        try:
+            st = st.copy()
+            st.merge(method=1, fill_value=0)
+        except Exception:
+            pass
+
+        # Resample to model's expected SR before annotate() to avoid Nyquist
+        # violations when the batch contains CH (40 Hz) or LH (1 Hz) traces.
+        try:
+            _model_sr = getattr(self._loaded_model, 'sampling_rate', None)
+            if _model_sr:
+                _keep = []
+                _drop_count = 0
+                for _tr in st:
+                    _sr = _tr.stats.sampling_rate
+                    if abs(_sr - _model_sr) < 0.5:
+                        _keep.append(_tr)
+                    elif _sr >= _model_sr / 4.0:
+                        _tr = _tr.copy()
+                        _tr.resample(_model_sr)
+                        _keep.append(_tr)
+                    else:
+                        _drop_count += 1
+                if _drop_count:
+                    log.debug('GPD: dropped %d trace(s) below minimum SR (%.0f Hz)',
+                              _drop_count, _model_sr / 4.0)
+                from obspy import Stream as _ObspyStream
+                st = _ObspyStream(traces=_keep)
+                if not st:
+                    return []
+        except Exception as _exc:
+            log.warning('GPD: SR normalisation failed: %s', _exc)
+
+        # Apply the same bandpass + taper as the native gpd_predict.py so that
+        # the CNN sees the same 1–20 Hz band-limited data it was trained on.
+        # High-frequency content (>20 Hz) confuses filters trained on band-limited data.
+        try:
+            st = st.copy()
+            st.detrend('demean')
+            st.taper(max_percentage=0.05, type='cosine', side='both')
+            st.filter('bandpass', freqmin=1.0, freqmax=20.0, corners=4, zerophase=True)
+        except Exception as _exc:
+            log.debug('GPD: bandpass filter failed: %s', _exc)
+
+        # Drop stations that lack at least one horizontal component (N/E/1/2).
+        # GPD is a 3-component model; feeding it with only a Z trace fills the
+        # N and E input channels with zeros, which the model misclassifies as S.
+        _HORIZONTAL_SUFFIXES = {'N', 'E', '1', '2'}
+        _sta_has_h = {}
+        for _tr in st:
+            _nsl = (_tr.stats.network, _tr.stats.station, _tr.stats.location)
+            if _tr.stats.channel[-1] in _HORIZONTAL_SUFFIXES:
+                _sta_has_h[_nsl] = True
+            elif _nsl not in _sta_has_h:
+                _sta_has_h[_nsl] = False
+        _dropped_stas = [k for k, v in _sta_has_h.items() if not v]
+        if _dropped_stas:
+            log.debug('GPD: skipping %d Z-only station(s): %s',
+                      len(_dropped_stas),
+                      ', '.join('%s.%s' % (n, s) for n, s, _ in _dropped_stas))
+            from obspy import Stream as _ObspyStream
+            st = _ObspyStream([_tr for _tr in st
+                               if (_tr.stats.network, _tr.stats.station, _tr.stats.location)
+                               not in set(_dropped_stas)])
+            if not st:
+                return []
+
+        orig_chan_map = {}
+        for tr in st:
+            key = (tr.stats.network, tr.stats.station, tr.stats.location)
+            if key not in orig_chan_map:
+                orig_chan_map[key] = tr.stats.channel
+
+        with torch.no_grad():
+            try:
+                annotations = self._loaded_model.annotate(st)
+            except Exception as exc:
+                log.warning('GPD annotate() failed: %s', exc)
+                return []
+
+        picks = []
+        from obspy.signal.trigger import trigger_onset
+        for ann_tr in annotations:
+            chan = ann_tr.stats.channel
+            # GPD output channels: GPD_P, GPD_S, GPD_N
+            if chan.endswith('_P'):
+                phase = 'P'
+            elif chan.endswith('_S'):
+                phase = 'S'
+            else:
+                continue  # skip noise channel
+
+            sr = ann_tr.stats.sampling_rate or 1.0
+            probs = ann_tr.data.astype(float)
+
+            # Use trigger_onset (like native gpd_predict.py): one pick per sustained
+            # trigger at the argmax.  find_peaks with small min_distance produces
+            # dozens of picks per seismic phase because GPD probability stays high
+            # throughout the phase energy rather than peaking sharply like PhaseNet.
+            trigs = trigger_onset(probs, self.threshold, 0.1)
+
+            nsl_key = (ann_tr.stats.network, ann_tr.stats.station, ann_tr.stats.location)
+            orig_cha = orig_chan_map.get(nsl_key, chan[:-(len(phase) + 1)])
+
+            for trig in trigs:
+                if trig[1] <= trig[0]:
+                    continue
+                pk = int(trig[0] + np.argmax(probs[trig[0]:trig[1]]))
+                prob = float(probs[pk])
+                t = ann_tr.stats.starttime + (pk / sr)
+                picks.append({
+                    'network': ann_tr.stats.network,
+                    'station': ann_tr.stats.station,
+                    'location': ann_tr.stats.location or '',
+                    'channel': orig_cha,
+                    'time': t,
+                    'phase': phase,
+                    'probability': prob,
+                    'method': 'GPD',
+                    'author': self._author_tag,
+                })
+        return picks
