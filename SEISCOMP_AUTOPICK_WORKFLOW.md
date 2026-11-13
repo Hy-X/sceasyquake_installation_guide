@@ -543,15 +543,19 @@ If you have X11 forwarding enabled (`ssh -Y user@ubuntu-ip`), you can launch the
 scrttv
 ```
 - Displays live, streaming continuous waveforms for your active stations.
-- You will see vertical dashed lines appear in real time whenever `scautopick` declares a detection!
+- You will see vertical dashed lines appear in real time whenever a picker declares a detection!
+
+![Real-Time Trace View](assets/scrttv.png)
 
 ### 2. `scmv` (Map View)
 ```bash
 scmv
 ```
-- Displays an interactive world map.
+- Displays an interactive regional or global map.
 - Stations flash **yellow/red** when a pick is triggered.
 - When `scautoloc` triangulates an epicenter, an earthquake circle pops up with depth and magnitude.
+
+![Map View](assets/scmv.png)
 
 ### 3. `scolv` (Origin Locator View)
 ```bash
@@ -560,6 +564,8 @@ scolv
 - The seismologist review workbench.
 - Select any detected event to inspect the waveform arrival alignment across all stations.
 - You can manually drag pick markers, reject bad stations, and click **Locate** to see hypocenter residuals.
+
+![Origin Locator View](assets/scolv.png)
 
 ---
 

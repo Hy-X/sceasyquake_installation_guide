@@ -29,6 +29,18 @@
 
 ---
 
+## 运行界面预览 (GUI Preview)
+
+| 震源定位审定工作台 (`scolv`) | 台网实时地图监控 (`scmv`) |
+| :---: | :---: |
+| ![Origin Locator View](assets/scolv.png)<br/>*值班地震专家工作台：多台站波形拟合、P/S 震相拾取与震源深度复核。* | ![Map View](assets/scmv.png)<br/>*台网全景地图：台站实时地动状态、警报触发与最新地震震中呈现。* |
+
+| 实时连续波形监控 (`scrttv`) |
+| :---: |
+| ![Real-Time Trace View](assets/scrttv.png)<br/>*多通道实时滚动记录仪（Helicorder）：展示连续三分量波形与实时自动拾取标记。* |
+
+---
+
 ## 系统兼容性与技术指标
 
 | 规格维度 | 详细说明 |
@@ -61,6 +73,7 @@ flowchart LR
 | **02** | ⚙️ **[第二阶段：实时数据流与运行演练](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: 业务流程与流水线验证**<br/>手把手实操指南：配置公网 SeedLink 实时数据流（俄克拉荷马台网）、掌握台站绑定机制、先验证经典 `scautopick` 基线，再平滑切换为 `sceasyquake` 深度学习拾取器。 | 台网运维人员、算法测试者与地震科研人员 |
 | **03** | 📚 **[第三阶段：架构原理与运维速查](learning_note.md)** | **日常维护: 架构参考与诊断工具箱**<br/>深入解析生产级三节点解耦架构、值班地震人员 `scolv` 交互工作流、无头服务器（Headless）SSH/X11 远程显示配置、MariaDB 数据查询及常用 CLI 诊断速查。 | 系统管理员、台网架构师与日常值班分析师 |
 | **运维** | 🔑 **[远程运维与 SSH 配置指南](SSH_REMOTE_OPERATIONS_GUIDE.md)** | **无头服务器管理与图形界面转发**<br/>生成 Ed25519 密钥对、免密公钥分发、配置 `~/.ssh/config` 别名、服务端口隧道转发（SeedLink、MariaDB、Web `scconfig`）、通过 X11 Forwarding 运行 `scolv`/`scmv` 图形工具以及使用 `tmux` 维持长时任务。 | 需在远程 Linux 服务器或云虚拟机上操作 SeisComP 的全体用户 |
+| **速查** | 📋 **[日常 CLI 运维速查表](SEISCOMP_CLI_CHEAT_SHEET.md)** | **高频命令快速复用手册**<br/>模块启停管理、SeedLink 实时流状态探测、PhaseNet 实时拾取监控、MariaDB 地震事件 SQL 查询、演练数据一键清理及日志排查速查。 | 日常值班台网人员、算法调试者与系统运维人员 |
 
 ---
 

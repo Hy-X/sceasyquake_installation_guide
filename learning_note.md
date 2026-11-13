@@ -228,6 +228,9 @@ Because SeisComP has a decoupled client–server architecture, human analysts do
 5. `scevent` prioritizes human review over machine solutions and promotes it to **Preferred Origin**.
 6. The public catalog and external notifications are immediately broadcast with verified status.
 
+![Origin Locator View (scolv)](assets/scolv.png)
+*Figure 4.1: The Origin Locator View (`scolv`) showing 3-component waveforms, theoretical travel-time alignment curves, and manual pick adjustments.*
+
 ---
 
 ## 5. System Architecture: Why 3 Nodes in Production?
@@ -374,6 +377,9 @@ scmv    # Map View
 ---
 
 ## 10. Quick Diagnostic & Query Cheat Sheet
+
+> [!TIP]
+> For an extended, standalone command reference covering SeedLink packet inspection, PhaseNet pick filtering, MariaDB SQL queries, and database cleanup scripts, see the **[Daily CLI Operations Cheat Sheet](SEISCOMP_CLI_CHEAT_SHEET.md)**.
 
 ```bash
 # Manage pipeline lifecycle:

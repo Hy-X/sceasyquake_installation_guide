@@ -29,6 +29,18 @@
 
 ---
 
+## Operational Interface Preview
+
+| Origin Locator View (`scolv`) | Real-Time Map View (`scmv`) |
+| :---: | :---: |
+| ![Origin Locator View](assets/scolv.png)<br/>*Duty seismologist review workbench showing waveform alignment and phase picks.* | ![Map View](assets/scmv.png)<br/>*Real-time network map displaying live station ground motion and event origins.* |
+
+| Real-Time Trace View (`scrttv`) |
+| :---: |
+| ![Real-Time Trace View](assets/scrttv.png)<br/>*Continuous multi-channel helicorder stream with real-time automatic detection markers.* |
+
+---
+
 ## System Compatibility & Specifications
 
 | Specification | Details |
@@ -61,6 +73,7 @@ flowchart LR
 | **02** | ⚙️ **[Stage 2: Real-Time Workflow & Testing](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: Operations & Pipeline Validation**<br/>Step-by-step operational guide: streaming public SeedLink stations (Oklahoma network), understanding station bindings, verifying native `scautopick`, and swapping in `sceasyquake` ML. | Operators, researchers, and network analysts |
 | **03** | 📚 **[Stage 3: Architecture & Reference Guide](learning_note.md)** | **Ongoing: Advanced Reference & Diagnostics**<br/>Deep dive into production 3-node architecture, duty seismologist `scolv` workflows, headless SSH / X11 tunneling, MariaDB queries, and CLI diagnostic cheatsheets. | System administrators & duty seismologists |
 | **Ops** | 🔑 **[Remote Access & SSH Guide](SSH_REMOTE_OPERATIONS_GUIDE.md)** | **Headless Operations & GUI Forwarding**<br/>Generating SSH keys, setting up `~/.ssh/config` aliases, tunneling service ports (SeedLink, MariaDB, Web `scconfig`), running `scolv`/`scmv` over X11 forwarding, and session persistence via `tmux`. | Anyone operating SeisComP on a remote server or VM |
+| **Cheatsheet** | 📋 **[Daily CLI Cheat Sheet](SEISCOMP_CLI_CHEAT_SHEET.md)** | **Everyday Command Reference**<br/>Quick copy-paste commands for process restarts, live SeedLink inspection, monitoring PhaseNet picks, MariaDB event queries, database cleanup, and troubleshooting. | Daily operators, analysts, and developers |
 
 ---
 
