@@ -42,19 +42,21 @@
 
 ---
 
-## 推荐学习与部署路线图 (3-Stage Roadmap)
+## 推荐学习与部署路线图 (Learning Roadmap)
 
-建议按照以下三阶段递进顺序进行部署与实操：
+建议按照以下进阶顺序进行系统阅读与部署实操：
 
 ```mermaid
 flowchart LR
-    Stage1["<b>第一阶段：系统安装与环境部署</b><br/>SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md<br/><i>基础依赖、SeisComP 7.4、Python ML与MariaDB</i>"]
+    Stage0["<b>第零阶段：地球科学与软件术语指南</b><br/>SEISCOMP_TERMINOLOGY_GUIDE.md<br/><i>从地质学基础到实时台网软件抽象概念</i>"]
+    --> Stage1["<b>第一阶段：系统安装与环境部署</b><br/>SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md<br/><i>基础依赖、SeisComP 7.4、Python ML与MariaDB</i>"]
     --> Stage2["<b>第二阶段：实时数据流与运行演练</b><br/>SEISCOMP_AUTOPICK_WORKFLOW.md<br/><i>SeedLink流接入、scautopick基准与ML桥接</i>"]
     --> Stage3["<b>第三阶段：架构原理与运维速查</b><br/>learning_note.md<br/><i>生产三节点架构、无头远程运维与CLI速查表</i>"]
 ```
 
 | 阶段 | 文档入口 | 核心定位与内容 | 适用对象 |
 | :---: | :--- | :--- | :--- |
+| **00** | 📖 **[第零阶段：专业术语与概念基础指南](SEISCOMP_TERMINOLOGY_GUIDE.md)** | **地球科学背景专用桥梁**<br/>将本科地球科学基础概念（断层破裂、P/S波、地震波谱、震级定义）平滑过渡到实时台网软件抽象（miniSEED、StationXML、SeedLink、`scmaster`消息总线、台站绑定及深度学习震相拾取原理）。 | 地学本科生、跨界科研人员及刚接触 SeisComP 的地震学者 |
 | **01** | 🚀 **[第一阶段：系统安装与环境部署](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | **Day 1: 从零搭建完整系统**<br/>在 Ubuntu 26.04 LTS 上安装 SeisComP 7.4、配置 MariaDB 数据库、搭建 Python 深度学习虚拟环境（PyTorch、SeisBench、ObsPy）以及安装 `sceasyquake` 模块代码。 | 首次部署系统的技术人员与研究人员 |
 | **02** | ⚙️ **[第二阶段：实时数据流与运行演练](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: 业务流程与流水线验证**<br/>手把手实操指南：配置公网 SeedLink 实时数据流（俄克拉荷马台网）、掌握台站绑定机制、先验证经典 `scautopick` 基线，再平滑切换为 `sceasyquake` 深度学习拾取器。 | 台网运维人员、算法测试者与地震科研人员 |
 | **03** | 📚 **[第三阶段：架构原理与运维速查](learning_note.md)** | **日常维护: 架构参考与诊断工具箱**<br/>深入解析生产级三节点解耦架构、值班地震人员 `scolv` 交互工作流、无头服务器（Headless）SSH/X11 远程显示配置、MariaDB 数据查询及常用 CLI 诊断速查。 | 系统管理员、台网架构师与日常值班分析师 |

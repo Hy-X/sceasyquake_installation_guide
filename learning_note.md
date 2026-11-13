@@ -2,6 +2,9 @@
 
 This document organizes the core concepts, architecture, workflows, and operational insights for **SeisComP** and its integration with deep-learning machine learning pickers (**easyQuake / SeisBench**).
 
+> [!TIP]
+> **Looking for foundational concepts?** If you are transitioning from undergraduate Earth Science coursework to operational seismology, check out the **[Comprehensive Terminology Guide](SEISCOMP_TERMINOLOGY_GUIDE.md)** for detailed explanations of SEED channel codes, miniSEED, StationXML, STA/LTA vs. Deep Learning (PhaseNet), and the SeisComP data model.
+
 ---
 
 ## Table of Contents

@@ -48,13 +48,15 @@ Follow these comprehensive guides in sequence depending on your goal:
 
 ```mermaid
 flowchart LR
-    Stage1["<b>Stage 1: System Installation</b><br/>SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md<br/><i>OS packages, SeisComP 7.4, Python ML & MariaDB</i>"]
+    Stage0["<b>Stage 0: Terminology Primer</b><br/>SEISCOMP_TERMINOLOGY_GUIDE.md<br/><i>Earth science concepts to real-time software abstractions</i>"]
+    --> Stage1["<b>Stage 1: System Installation</b><br/>SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md<br/><i>OS packages, SeisComP 7.4, Python ML & MariaDB</i>"]
     --> Stage2["<b>Stage 2: Operational Workflow</b><br/>SEISCOMP_AUTOPICK_WORKFLOW.md<br/><i>SeedLink streaming, scautopick baseline & ML bridge</i>"]
     --> Stage3["<b>Stage 3: Architecture & Reference</b><br/>learning_note.md<br/><i>Production topology, headless SSH/X11 & CLI cheatsheet</i>"]
 ```
 
 | Stage | Document | Purpose & Scope | Target Audience |
 | :---: | :--- | :--- | :--- |
+| **00** | 📖 **[Stage 0: Terminology & Conceptual Primer](SEISCOMP_TERMINOLOGY_GUIDE.md)** | **Foundational Concepts for Earth Scientists**<br/>Bridges undergraduate Earth Science knowledge (P/S waves, seismograms, Richter scale) to real-time software abstractions (miniSEED, StationXML, SeedLink, `scmaster`, bindings, and deep-learning phase pickers). | Undergrads, new researchers, and seismologists new to SeisComP |
 | **01** | 🚀 **[Stage 1: System Installation](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | **Day 1: Zero-to-Running Deployment**<br/>Step-by-step instructions for installing SeisComP 7.4 on Ubuntu 26.04 LTS, setting up MariaDB, configuring Python ML environments (PyTorch, SeisBench, ObsPy), and installing `sceasyquake`. | Everyone starting with a fresh Linux machine |
 | **02** | ⚙️ **[Stage 2: Real-Time Workflow & Testing](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: Operations & Pipeline Validation**<br/>Step-by-step operational guide: streaming public SeedLink stations (Oklahoma network), understanding station bindings, verifying native `scautopick`, and swapping in `sceasyquake` ML. | Operators, researchers, and network analysts |
 | **03** | 📚 **[Stage 3: Architecture & Reference Guide](learning_note.md)** | **Ongoing: Advanced Reference & Diagnostics**<br/>Deep dive into production 3-node architecture, duty seismologist `scolv` workflows, headless SSH / X11 tunneling, MariaDB queries, and CLI diagnostic cheatsheets. | System administrators & duty seismologists |
