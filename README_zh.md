@@ -2,6 +2,13 @@
 
 [ English ](README.md) | [ 简体中文 ](README_zh.md)
 
+[![SeisComP 7.4](https://img.shields.io/badge/SeisComP-7.4-00599C?logo=linux&logoColor=white)](https://www.seiscomp.de/)
+[![Ubuntu 26.04 LTS](https://img.shields.io/badge/Ubuntu-26.04%20LTS-E95420?logo=ubuntu&logoColor=white)](https://ubuntu.com/)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![AI Models](https://img.shields.io/badge/AI%20Models-PhaseNet%20%7C%20EQTransformer-8A2BE2)](#系统兼容性与技术指标)
+[![Hardware](https://img.shields.io/badge/Hardware-CPU%20%7C%20CUDA%20GPU-4CAF50)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > [!IMPORTANT]
 > ### 🔗 上游代码仓库
 > 本仓库包含将 **easyQuake** 深度学习震相拾取系统与 **SeisComP** 地震综合处理平台集成的安装手册、运行架构、运维工作流及演示文档。
