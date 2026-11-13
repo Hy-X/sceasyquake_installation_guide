@@ -42,15 +42,22 @@
 
 ---
 
-## 文档索引
+## 推荐学习与部署路线图 (3-Stage Roadmap)
 
-本仓库提供从单机部署、实时流调试到高级运维排查的完整技术文档：
+建议按照以下三阶段递进顺序进行部署与实操：
 
-| 文档名称 | 内容描述 |
-| :--- | :--- |
-| 📖 **[完整安装指南 (Installation Guide)](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | 包含基础依赖库、MariaDB 数据库配置、Python 深度学习运行环境（PyTorch、SeisBench、ObsPy）、`sceasyquake` 模块配置与端到端系统验证。 |
-| ⚙️ **[自动拾取与实时工作流 (Autopick Workflow)](SEISCOMP_AUTOPICK_WORKFLOW.md)** | SeedLink 实时数据流配置、绑定配置层级、关联定位器参数调优、故障排查方案与注入演练。 |
-| 📝 **[架构笔记与诊断速查表 (Learning Notes)](learning_note.md)** | 深度架构原理解析、无头服务器（Headless）远程运维模式及常用 SeisComP CLI 诊断命令速查。 |
+```mermaid
+flowchart LR
+    Stage1["<b>第一阶段：系统安装与环境部署</b><br/>SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md<br/><i>基础依赖、SeisComP 7.4、Python ML与MariaDB</i>"]
+    --> Stage2["<b>第二阶段：实时数据流与运行演练</b><br/>SEISCOMP_AUTOPICK_WORKFLOW.md<br/><i>SeedLink流接入、scautopick基准与ML桥接</i>"]
+    --> Stage3["<b>第三阶段：架构原理与运维速查</b><br/>learning_note.md<br/><i>生产三节点架构、无头远程运维与CLI速查表</i>"]
+```
+
+| 阶段 | 文档入口 | 核心定位与内容 | 适用对象 |
+| :---: | :--- | :--- | :--- |
+| **01** | 🚀 **[第一阶段：系统安装与环境部署](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | **Day 1: 从零搭建完整系统**<br/>在 Ubuntu 26.04 LTS 上安装 SeisComP 7.4、配置 MariaDB 数据库、搭建 Python 深度学习虚拟环境（PyTorch、SeisBench、ObsPy）以及安装 `sceasyquake` 模块代码。 | 首次部署系统的技术人员与研究人员 |
+| **02** | ⚙️ **[第二阶段：实时数据流与运行演练](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: 业务流程与流水线验证**<br/>手把手实操指南：配置公网 SeedLink 实时数据流（俄克拉荷马台网）、掌握台站绑定机制、先验证经典 `scautopick` 基线，再平滑切换为 `sceasyquake` 深度学习拾取器。 | 台网运维人员、算法测试者与地震科研人员 |
+| **03** | 📚 **[第三阶段：架构原理与运维速查](learning_note.md)** | **日常维护: 架构参考与诊断工具箱**<br/>深入解析生产级三节点解耦架构、值班地震人员 `scolv` 交互工作流、无头服务器（Headless）SSH/X11 远程显示配置、MariaDB 数据查询及常用 CLI 诊断速查。 | 系统管理员、台网架构师与日常值班分析师 |
 
 ---
 
