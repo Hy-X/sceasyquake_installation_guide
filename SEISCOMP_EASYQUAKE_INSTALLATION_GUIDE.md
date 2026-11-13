@@ -103,14 +103,15 @@ EOF
    > [!IMPORTANT]
    > The base binary package (`seiscomp-*-ubuntu26.04-x86_64.tar.gz`) is deliberately lightweight and **does not include map tiles or vector geographic layers**. Without maps, GUI applications (`scolv`, `scmv`) render blank or black map backgrounds.
    
-   Download and unpack `seiscomp-maps.tar.gz` into `/home/sysop/Projects/SeiscomP`:
+   Download and unpack `seiscomp-maps.tar.gz` into the parent directory of `$SEISCOMP_ROOT`:
    ```bash
-   cd /home/sysop/Projects/SeiscomP
+   # Navigate to the parent directory where seiscomp was extracted
+   cd $SEISCOMP_ROOT/..   # e.g., ~/Projects/SeiscomP or $HOME
    wget https://www.seiscomp.de/downloader/seiscomp-maps.tar.gz
    tar -xvf seiscomp-maps.tar.gz
-   cd seiscomp
+   cd $SEISCOMP_ROOT
    ```
-   *(This extracts basemaps, coastlines, and topography directly into `seiscomp/share/maps/`).*
+   *(This extracts basemaps, coastlines, and topography directly into `$SEISCOMP_ROOT/share/maps/`).*
 
 4. **Install all Ubuntu system libraries (Qt, XML, SSL, ncurses)** automatically:
    ```bash
@@ -146,8 +147,8 @@ EOF
    ```bash
    cat << 'EOF' >> ~/.bashrc
 
-   # SeisComP Environment
-   export SEISCOMP_ROOT=/home/sysop/Projects/SeiscomP/seiscomp
+   # SeisComP Environment (adjust SEISCOMP_ROOT to your install location, e.g. ~/seiscomp or ~/Projects/SeiscomP/seiscomp)
+   export SEISCOMP_ROOT=${SEISCOMP_ROOT:-$HOME/seiscomp}
    export PATH=$SEISCOMP_ROOT/bin:$PATH
    export LD_LIBRARY_PATH=$SEISCOMP_ROOT/lib:$LD_LIBRARY_PATH
    export PYTHONPATH=$SEISCOMP_ROOT/lib/python:$PYTHONPATH
@@ -167,7 +168,7 @@ SeisComP runs its own embedded Python bindings. You must install PyTorch, SeisBe
 
 ```bash
 # 1. Navigate to your SeisComP root directory and identify SeisComP's Python binary
-cd /home/sysop/Projects/SeiscomP/seiscomp
+cd $SEISCOMP_ROOT
 export SC_PYTHON=$(bin/seiscomp exec which python3)
 echo "SeisComP Python: $SC_PYTHON"
 
@@ -199,19 +200,19 @@ Dependencies successfully loaded. CUDA Available: True  (or False if CPU-only)
 
 ## Step 4: Install sceasyquake (easyQuake_seiscomp)
 
-Clone this repository and run the automated installer, passing your SeisComP root path:
+Clone this repository and run the automated installer, passing your SeisComP root path (`$SEISCOMP_ROOT`):
 
 ```bash
-# 1. Clone into your Projects directory alongside SeiscomP
-cd /home/sysop/Projects
+# 1. Clone into your preferred workspace directory (e.g. ~/Projects or $HOME)
+cd $(dirname "$SEISCOMP_ROOT")
 git clone https://github.com/jakewalter/easyQuake_seiscomp.git
 cd easyQuake_seiscomp/sceasyquake
 
 # 2. Run the installer, explicitly passing your SeisComP installation directory:
-bash install.sh /home/sysop/Projects/SeiscomP/seiscomp
+bash install.sh $SEISCOMP_ROOT
 
 # 3. On modern Ubuntu (PEP 668), register the editable package with pip:
-$SC_PYTHON -m pip install -e /home/sysop/Projects/easyQuake_seiscomp/sceasyquake --break-system-packages
+$SC_PYTHON -m pip install -e . --break-system-packages
 
 # 4. Verify that sceasyquake imports cleanly:
 $SC_PYTHON -c 'import sceasyquake; print("sceasyquake loaded successfully")'
@@ -220,8 +221,8 @@ $SC_PYTHON -c 'import sceasyquake; print("sceasyquake loaded successfully")'
 *(Optional)* If you also wish to use **PyOcto** for high-throughput phase association:
 ```bash
 $SC_PYTHON -m pip install pyocto pandas --break-system-packages
-cd /home/sysop/Projects/easyQuake_seiscomp/scpyocto
-bash install.sh /home/sysop/Projects/SeiscomP/seiscomp
+cd ../scpyocto
+bash install.sh $SEISCOMP_ROOT
 ```
 
 ---
@@ -253,7 +254,7 @@ Before enabling modules, understand how tasks are divided in this AI-enhanced pi
 
 ### 1. Disable the traditional STA/LTA picker and enable sceasyquake
 ```bash
-cd /home/sysop/Projects/SeiscomP/seiscomp
+cd $SEISCOMP_ROOT
 
 bin/seiscomp disable scautopick
 bin/seiscomp enable sceasyquake
@@ -261,7 +262,7 @@ bin/seiscomp update-config
 ```
 
 ### 2. Configure `sceasyquake.cfg`
-Edit `$SEISCOMP_ROOT/etc/sceasyquake.cfg` (or `/home/sysop/Projects/SeiscomP/seiscomp/etc/sceasyquake.cfg`):
+Edit `$SEISCOMP_ROOT/etc/sceasyquake.cfg`:
 
 ```ini
 # SeedLink source (local acquisition)
@@ -483,15 +484,15 @@ During deployment with modern Python (3.12+) and SeisComP, several critical low-
 | Issue | Cause | Fix |
 |---|---|---|
 | `seisbench not available` or `No module named torch` | Installed in system Python rather than SeisComP's Python | Ensure you ran `$SC_PYTHON -m pip install ...` where `$SC_PYTHON` is `$(seiscomp exec which python3)`. |
-| `Cannot connect to database` | MariaDB service is stopped or bad credentials | Check `sudo systemctl status mariadb` and verify user `sysop` password in `$HOME/seiscomp/etc/global.cfg`. |
+| `Cannot connect to database` | MariaDB service is stopped or bad credentials | Check `sudo systemctl status mariadb` and verify user `sysop` password in `$SEISCOMP_ROOT/etc/global.cfg`. |
 | `Client name not unique` | An old `sceasyquake` process is still running | Run `pkill -f sceasyquake-stream` then restart via `seiscomp restart sceasyquake`. |
-| `Zero origins created` | `scautoloc` waiting for SNR amplitudes | Ensure `autoloc.amplTypeAbs = snr` is added to `$HOME/seiscomp/etc/scautoloc.cfg`. |
+| `Zero origins created` | `scautoloc` waiting for SNR amplitudes | Ensure `autoloc.amplTypeAbs = snr` is added to `$SEISCOMP_ROOT/etc/scautoloc.cfg`. |
 | GPU stays at 0% utilization | Configured for CPU device | Set `picker.device = cuda` in `sceasyquake.cfg` and verify `torch.cuda.is_available()`. |
 | `No stations added (empty module configuration?)` | Station bindings missing, `detecStream` channel mismatch, or forgot `seiscomp update-config` | Ensure `detecStream = HH` in `etc/key/global/profile_default`, bind via `seiscomp shell`, and run `seiscomp update-config`. |
-| `seiscomp status` exits blank or code 245 | `$SEISCOMP_ROOT` points to outer directory without `etc/descriptions` | Ensure `SEISCOMP_ROOT=/home/sysop/Projects/SeiscomP/seiscomp` in `~/.bashrc` and `source ~/.bashrc`. |
+| `seiscomp status` exits blank or code 245 | `$SEISCOMP_ROOT` points to outer directory without `etc/descriptions` | Ensure `SEISCOMP_ROOT` in `~/.bashrc` points directly to the installation root containing `bin/`, `etc/`, `share/`. |
 | `scdumppicks: not found` | Obsolete command removed in modern SeisComP 5/6/7 | Use `tail -f ~/.seiscomp/log/scautopick.log` or direct MariaDB SQL queries on the `Pick` table. |
 | `cannot connect to SeedLink server: '<' not supported between instances of 'float' and 'NoneType'` | In Python 3, ObsPy's `EasySeedLinkClient` leaves `self.conn.timeout = None` by default, causing `is_connected_impl` to compare `float < None` | Set `self.conn.timeout = 10.0` inside `_Client.__init__` in `sceasyquake/lib/sceasyquake/stream/seiscomp_stream.py`. |
 | `negotiation with remote SeedLink failed: 'no stations accepted'` | SeedLink v3 protocol rejects station wildcards (`*` or `????`) during the `STATION` handshake command | Use `_get_seedlink_stations()` auto-discovery in `seiscomp_stream.py` to query active stations via `INFO STATIONS` and subscribe explicitly. |
 | `Batch cap hit: N eligible stations, processing 64 this step` | Default safety throttle (`picker.max_batch_stations = 64`) to protect single-threaded CPUs from lag | Overdue stations are prioritized first; on GPU or multi-core CPU, raise `picker.max_batch_stations = 150` in `etc/sceasyquake.cfg`. |
 | `ERROR 1054: Unknown column 'publicID'` in MariaDB | In SeisComP's relational schema, universal IDs are stored in the `PublicObject` table | Join `PublicObject po ON po._oid = Pick._oid` to access `publicID`. |
-| `scolv` or `scmv` shows blank / black map background | The base SeisComP release tarball does not contain map tiles/layers | Download `https://www.seiscomp.de/downloader/seiscomp-maps.tar.gz` to `/home/sysop/Projects/SeiscomP` and run `tar -xvf seiscomp-maps.tar.gz`. |
+| `scolv` or `scmv` shows blank / black map background | The base SeisComP release tarball does not contain map tiles/layers | Download `https://www.seiscomp.de/downloader/seiscomp-maps.tar.gz` to `$SEISCOMP_ROOT/..` and run `tar -xvf seiscomp-maps.tar.gz`. |

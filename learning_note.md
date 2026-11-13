@@ -80,7 +80,7 @@ flowchart TD
 ## 2.1 SeisComP Directory Structure ($SEISCOMP_ROOT)
 
 ```
-/home/hongyuxiao/Projects/SeiscomP/
+<PARENT_DIR>/ (e.g. ~/Projects/SeiscomP or $HOME)
 │
 ├── stationxml/                   # Staging directory for raw FDSN StationXML downloads
 │   ├── OK_stations.xml
@@ -363,7 +363,7 @@ scmv    # Map View
 ```
 
 > [!TIP]
-> **Missing Basemaps in `scolv` or `scmv`?** If the map canvas renders a blank or black background, the map tiles package was not installed. Unpack `seiscomp-maps.tar.gz` into `/home/hongyuxiao/Projects/SeiscomP` (`tar -xvf seiscomp-maps.tar.gz`) so `seiscomp/share/maps/` is populated.
+> **Missing Basemaps in `scolv` or `scmv`?** If the map canvas renders a blank or black background, the map tiles package was not installed. Unpack `seiscomp-maps.tar.gz` into the parent directory of `$SEISCOMP_ROOT` (`cd $SEISCOMP_ROOT/.. && tar -xvf seiscomp-maps.tar.gz`) so `$SEISCOMP_ROOT/share/maps/` is populated.
 
 ---
 
