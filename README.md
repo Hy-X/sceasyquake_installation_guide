@@ -31,13 +31,20 @@
 
 ## Operational Interface Preview
 
-| Origin Locator View (`scolv`) | Real-Time Map View (`scmv`) |
-| :---: | :---: |
-| ![Origin Locator View](assets/scolv.png)<br/>*Duty seismologist review workbench showing waveform alignment and phase picks.* | ![Map View](assets/scmv.png)<br/>*Real-time network map displaying live station ground motion and event origins.* |
+### 1. Origin Locator View (`scolv`)
+*Duty seismologist review workbench showing 3-component waveform alignment, deep-learning P/S picks, and manual origin review.*
 
-| Real-Time Trace View (`scrttv`) |
-| :---: |
-| ![Real-Time Trace View](assets/scrttv.png)<br/>*Continuous multi-channel helicorder stream with real-time automatic detection markers.* |
+![Origin Locator View](assets/scolv.png)
+
+### 2. Real-Time Map View (`scmv`)
+*Real-time network map displaying live station ground motion status, alarms, and earthquake epicenter origins.*
+
+![Map View](assets/scmv.png)
+
+### 3. Real-Time Trace View (`scrttv`)
+*Continuous multi-channel streaming helicorder with real-time automatic detection markers.*
+
+![Real-Time Trace View](assets/scrttv.png)
 
 ---
 

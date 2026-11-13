@@ -31,13 +31,20 @@
 
 ## 运行界面预览 (GUI Preview)
 
-| 震源定位审定工作台 (`scolv`) | 台网实时地图监控 (`scmv`) |
-| :---: | :---: |
-| ![Origin Locator View](assets/scolv.png)<br/>*值班地震专家工作台：多台站波形拟合、P/S 震相拾取与震源深度复核。* | ![Map View](assets/scmv.png)<br/>*台网全景地图：台站实时地动状态、警报触发与最新地震震中呈现。* |
+### 1. 震源定位审定工作台 (`scolv`)
+*值班地震专家交互工作台：多台站三分量波形拟合、深度学习 P/S 震相拾取与震源深度复核。*
 
-| 实时连续波形监控 (`scrttv`) |
-| :---: |
-| ![Real-Time Trace View](assets/scrttv.png)<br/>*多通道实时滚动记录仪（Helicorder）：展示连续三分量波形与实时自动拾取标记。* |
+![Origin Locator View](assets/scolv.png)
+
+### 2. 台网实时地图监控 (`scmv`)
+*台网全景地图：台站实时地动状态、警报触发与最新地震震中呈现。*
+
+![Map View](assets/scmv.png)
+
+### 3. 实时连续波形监控 (`scrttv`)
+*多通道实时滚动记录仪（Helicorder）：展示连续三分量波形与实时自动拾取标记。*
+
+![Real-Time Trace View](assets/scrttv.png)
 
 ---
 
