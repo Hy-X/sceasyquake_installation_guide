@@ -46,6 +46,16 @@
 
 ![Real-Time Trace View](assets/scrttv.png)
 
+### 4. System Status & Module Overview (`scconfig`)
+*Graphical system management interface showing real-time daemon states, enabled modules, and pipeline health.*
+
+![System Status](assets/scconfig_system_status.png)
+
+### 5. EasyQuake Module Configuration (`scconfig`)
+*Native parameter tuning panel for `sceasyquake`: selecting deep-learning models (PhaseNet / EQTransformer), stream codes, and inference parameters.*
+
+![EasyQuake Configuration](assets/sconfig_module_sceasyquake.png)
+
 ---
 
 ## System Compatibility & Specifications

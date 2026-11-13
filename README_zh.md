@@ -46,6 +46,16 @@
 
 ![Real-Time Trace View](assets/scrttv.png)
 
+### 4. 系统运行状态与模块监控 (`scconfig`)
+*图形化系统管理与服务监控面板：展示核心守护进程运行状态、已启用模块与服务健康度。*
+
+![System Status](assets/scconfig_system_status.png)
+
+### 5. easyQuake 深度学习模块参数配置 (`scconfig`)
+*SeisComP 原生参数配置面板：便捷配置 `sceasyquake` 模型架构（PhaseNet / EQTransformer）、波形数据流代码、设备（CPU/GPU）与推理缓存参数。*
+
+![EasyQuake Configuration](assets/sconfig_module_sceasyquake.png)
+
 ---
 
 ## 系统兼容性与技术指标

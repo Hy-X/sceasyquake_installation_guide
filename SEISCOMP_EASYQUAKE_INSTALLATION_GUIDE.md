@@ -285,6 +285,10 @@ picker.step_seconds       = 5
 picker.max_batch_stations = 150    # default is 64; raise to 150-200 to process all stations simultaneously
 ```
 
+*Alternatively, you can configure these parameters visually using `scconfig`:*
+
+![EasyQuake Configuration in scconfig](assets/sconfig_module_sceasyquake.png)
+
 ### 3. Ensure `scautoloc` is configured to associate AI picks
 Because `sceasyquake` attaches **SNR** amplitude estimates to its picks, `scautoloc` must be configured to recognize `snr` amplitudes so it associates them immediately without waiting for legacy amplitude modules. 
 
@@ -332,7 +336,9 @@ If the Ubuntu server is headless or remote, you can interact with it from your l
    QT_QPA_PLATFORM=offscreen ./bin/seiscomp exec scconfig --web 8080
    ```
    *(Note: If Qt complains about missing cursor libraries on headless Ubuntu, run `sudo apt install -y libxcb-cursor0`).*
-3. Open `http://localhost:8080` in Chrome/Safari on your local machine.
+3. Open `http://localhost:8080` in Chrome/Safari on your local machine:
+
+![System Status in scconfig](assets/scconfig_system_status.png)
 
 ### Option 2: X11 GUI Forwarding (for `scolv` and `scmv`)
 1. On your Mac, install [XQuartz](https://www.xquartz.org/) (`brew install --cask xquartz`).

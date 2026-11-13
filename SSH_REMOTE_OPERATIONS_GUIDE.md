@@ -196,7 +196,9 @@ If you only need to configure stations, bindings, or database settings and don't
    ```
    http://localhost:8080
    ```
-   You can view and modify the entire inventory, edit module parameters, and click **Save** directly through the browser.
+   You can view and modify the entire inventory, monitor daemon health, and edit module parameters directly through the browser:
+
+![System Status in scconfig](assets/scconfig_system_status.png)
 
 ---
 
