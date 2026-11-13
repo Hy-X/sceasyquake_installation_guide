@@ -78,7 +78,7 @@ SeisComP 原生自带的 `scautopick` 主要依赖单分量（垂直通道）的
 
 ## 作者与维护者信息
 
-* **文档编写与维护者**：**肖鸿宇 博士 (Hongyu Xiao, Ph.D.)**
+* **文档编写与维护者**：**萧鸿宇 博士 (Hongyu Xiao, Ph.D.)**
   * **职务**：研究员 / 地震学家与 AI 地球物理学家，[俄克拉荷马地质调查局 (OGS)](https://www.ou.edu/ogs)，俄克拉荷马大学 (University of Oklahoma)
   * **教育背景**：地质与地球物理学博士，伊利诺伊大学厄巴纳-香槟分校 (UIUC)
   * **个人主页**：[https://hy-x.github.io](https://hy-x.github.io)
