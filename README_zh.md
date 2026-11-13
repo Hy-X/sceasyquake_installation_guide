@@ -60,6 +60,7 @@ flowchart LR
 | **01** | 🚀 **[第一阶段：系统安装与环境部署](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | **Day 1: 从零搭建完整系统**<br/>在 Ubuntu 26.04 LTS 上安装 SeisComP 7.4、配置 MariaDB 数据库、搭建 Python 深度学习虚拟环境（PyTorch、SeisBench、ObsPy）以及安装 `sceasyquake` 模块代码。 | 首次部署系统的技术人员与研究人员 |
 | **02** | ⚙️ **[第二阶段：实时数据流与运行演练](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: 业务流程与流水线验证**<br/>手把手实操指南：配置公网 SeedLink 实时数据流（俄克拉荷马台网）、掌握台站绑定机制、先验证经典 `scautopick` 基线，再平滑切换为 `sceasyquake` 深度学习拾取器。 | 台网运维人员、算法测试者与地震科研人员 |
 | **03** | 📚 **[第三阶段：架构原理与运维速查](learning_note.md)** | **日常维护: 架构参考与诊断工具箱**<br/>深入解析生产级三节点解耦架构、值班地震人员 `scolv` 交互工作流、无头服务器（Headless）SSH/X11 远程显示配置、MariaDB 数据查询及常用 CLI 诊断速查。 | 系统管理员、台网架构师与日常值班分析师 |
+| **运维** | 🔑 **[远程运维与 SSH 配置指南](SSH_REMOTE_OPERATIONS_GUIDE.md)** | **无头服务器管理与图形界面转发**<br/>生成 Ed25519 密钥对、免密公钥分发、配置 `~/.ssh/config` 别名、服务端口隧道转发（SeedLink、MariaDB、Web `scconfig`）、通过 X11 Forwarding 运行 `scolv`/`scmv` 图形工具以及使用 `tmux` 维持长时任务。 | 需在远程 Linux 服务器或云虚拟机上操作 SeisComP 的全体用户 |
 
 ---
 

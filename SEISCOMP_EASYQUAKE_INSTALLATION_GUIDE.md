@@ -317,6 +317,9 @@ seiscomp restart
 
 ## Step 6: Remote Access & GUI Operation via SSH
 
+> [!TIP]
+> For a complete guide on generating SSH keypairs, passwordless logins, `~/.ssh/config` aliases, port tunneling (SeedLink, MariaDB, Web `scconfig`), and keeping tasks alive with `tmux`, see the **[Remote Server Access & SSH Operations Guide](SSH_REMOTE_OPERATIONS_GUIDE.md)**.
+
 If the Ubuntu server is headless or remote, you can interact with it from your local machine (e.g., Mac or laptop):
 
 ### Option 1: Web-Based Configuration (`scconfig`)

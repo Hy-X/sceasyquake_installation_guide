@@ -60,6 +60,7 @@ flowchart LR
 | **01** | 🚀 **[Stage 1: System Installation](SEISCOMP_EASYQUAKE_INSTALLATION_GUIDE.md)** | **Day 1: Zero-to-Running Deployment**<br/>Step-by-step instructions for installing SeisComP 7.4 on Ubuntu 26.04 LTS, setting up MariaDB, configuring Python ML environments (PyTorch, SeisBench, ObsPy), and installing `sceasyquake`. | Everyone starting with a fresh Linux machine |
 | **02** | ⚙️ **[Stage 2: Real-Time Workflow & Testing](SEISCOMP_AUTOPICK_WORKFLOW.md)** | **Day 2: Operations & Pipeline Validation**<br/>Step-by-step operational guide: streaming public SeedLink stations (Oklahoma network), understanding station bindings, verifying native `scautopick`, and swapping in `sceasyquake` ML. | Operators, researchers, and network analysts |
 | **03** | 📚 **[Stage 3: Architecture & Reference Guide](learning_note.md)** | **Ongoing: Advanced Reference & Diagnostics**<br/>Deep dive into production 3-node architecture, duty seismologist `scolv` workflows, headless SSH / X11 tunneling, MariaDB queries, and CLI diagnostic cheatsheets. | System administrators & duty seismologists |
+| **Ops** | 🔑 **[Remote Access & SSH Guide](SSH_REMOTE_OPERATIONS_GUIDE.md)** | **Headless Operations & GUI Forwarding**<br/>Generating SSH keys, setting up `~/.ssh/config` aliases, tunneling service ports (SeedLink, MariaDB, Web `scconfig`), running `scolv`/`scmv` over X11 forwarding, and session persistence via `tmux`. | Anyone operating SeisComP on a remote server or VM |
 
 ---
 
