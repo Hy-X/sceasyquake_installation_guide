@@ -76,9 +76,11 @@ The deployment guides in this repository are verified on **SeisComP 7.4** runnin
 
 ## Author & Maintainer
 
-* **Guide Author / Maintainer**: **Hongyu Xiao**
-* **Personal Website**: [https://hy-x.github.io](https://hy-x.github.io)
-* **GitHub Profile**: [@Hy-X](https://github.com/Hy-X)
+* **Author**: **Hongyu Xiao, Ph.D.**
+  * **Role**: Research Scientist / Seismologist & AI Geophysicist, [Oklahoma Geological Survey (OGS)](https://www.ou.edu/ogs), University of Oklahoma
+  * **Education**: Ph.D. in Geology & Geophysics, University of Illinois at Urbana-Champaign (UIUC)
+  * **Personal Website**: [https://hy-x.github.io](https://hy-x.github.io)
+  * **GitHub**: [@Hy-X](https://github.com/Hy-X)
 
 ---
 
