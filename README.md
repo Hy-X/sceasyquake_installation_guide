@@ -1,5 +1,7 @@
 # SeisComP & easyQuake Real-Time Deployment Guides
 
+[ English ](README.md) | [ 简体中文 ](README_zh.md)
+
 > [!IMPORTANT]
 > ### 🔗 Upstream Repository
 > This repository contains documentation, installation manuals, operational workflows, and presentation materials for integrating **easyQuake** with **SeisComP**.
