@@ -74,6 +74,14 @@ The deployment guides in this repository are verified on **SeisComP 7.4** runnin
 
 ---
 
+## Author & Maintainer
+
+* **Guide Author / Maintainer**: **Hongyu Xiao**
+* **Personal Website**: [https://hy-x.github.io](https://hy-x.github.io)
+* **GitHub Profile**: [@Hy-X](https://github.com/Hy-X)
+
+---
+
 ## Upstream References & Credits
 
 * **Core Repository**: [jakewalter/easyQuake_seiscomp](https://github.com/jakewalter/easyQuake_seiscomp)
