@@ -392,6 +392,7 @@ SELECT
     p.creationInfo_creationTime AS created
 FROM Pick p
 JOIN PublicObject po ON po._oid = p._oid
+ORDER BY time_value DESC
 LIMIT 15;
 "
 ```
@@ -412,6 +413,7 @@ SELECT
     o.creationInfo_creationTime AS created
 FROM Origin o
 JOIN PublicObject po ON po._oid = o._oid
+ORDER BY time_value DESC
 LIMIT 10;
 "
 ```
