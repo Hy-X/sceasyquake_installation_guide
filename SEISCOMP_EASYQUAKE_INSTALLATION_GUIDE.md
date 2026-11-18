@@ -390,7 +390,7 @@ SELECT
     p.methodID,
     p.creationInfo_author AS author,
     p.creationInfo_creationTime AS created
-FROM Pick   ``Q`111`22211WS786554464443FDRDGCXXZSS?p
+FROM Pick p
 JOIN PublicObject po ON po._oid = p._oid
 ORDER BY time_value DESC
 LIMIT 15;
